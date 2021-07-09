@@ -5,9 +5,7 @@ import TranslateComponent from './TranslateComponent';
 function App() {
   return (
     <div className="App">
-      <TranslateComponent
-        output="Hallo wereld!"
-      />
+      <TranslateComponent />
     </div>
   );
 }

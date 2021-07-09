@@ -2,18 +2,23 @@ import React from 'react';
 import LanguageSelector from './LanguageSelector';
 import TermInput from './TermInput';
 import TranslateOutput from './TranslateOutput';
+import TranslateButton from './TranslateButton';
 
 interface Props {
-  output: string;
 }
 
 interface State {
-
+  output: string;
 }
 
 class TranslateComponent extends React.Component<Props, State> {
-  static defaultProps: Props = {
-    output: ""
+  constructor(props : Props) {
+    super(props);
+    this.state = { output: '' };
+  }
+
+  translate() {
+    this.setState({output : 'hallo'});
   }
 
   render() {
@@ -21,10 +26,13 @@ class TranslateComponent extends React.Component<Props, State> {
       <div className="translate-component">
         <LanguageSelector />
         <TermInput />
+        <TranslateButton
+          onClick={this.translate.bind(this)}
+        />
 
         <LanguageSelector />
         <TranslateOutput
-          output={this.props.output}
+          output={this.state.output}
         />
       </div>
     );
