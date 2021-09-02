@@ -30,30 +30,36 @@ const findPage =
       });
   };
 
-const wikiTranslate = function async
+const getDifferentLangTitle = function
+(apiUrl : string,
+ title : string,
+ outLang : string) : Promise<string> {
+   // https://www.mediawiki.org/wiki/API:Langlinks
+   let options = '?action=query&prop=langlinks&format=json&utf8=1&lllang=' + outLang + '&origin=*';
+   return fetch(apiUrl + options + '&titles=' + title + '&llang=' + outLang)
+     .then(res => res.json())
+     .then(data => {
+       let pages = data.query.pages;
+       let pageId = Object.keys(pages)[0];
+       let langlinks = pages[pageId].langlinks;
+       for (let i = 0; i < langlinks.length; i++) {
+         if (langlinks[i].lang === outLang) {
+           return langlinks[i]['*'];
+         }
+       }
+     });
+ };
+
+const wikiTranslate = function
 (inLang : string,
  term : string,
  outLang : string) : Promise<string> {
    let apiUrl = 'https://' + inLang + '.wikipedia.org/w/api.php';
    return findPage(apiUrl, term)
        .then(title => {
-         let wikiBaseApi = 'https://www.wikidata.org/w/api.php';
-         let options = '?action=wbgetentities&sites=' + inLang + 'wiki&format=json&utf8=1&origin=*';
-         return fetch(wikiBaseApi + options + '&titles=' + title);
+         return getDifferentLangTitle(apiUrl, title, outLang);
        })
-       .then(res => res.json())
-       .then(data => {
-         let entities = data['entities'];
-         let keys = Object.keys(entities);
-         let id = '';
-         for (let i = 0; i < keys.length; i++) {
-           if (keys[i][0] === 'Q') {
-             id = keys[i];
-           }
-         }
-         return data['entities'][id]['labels'][outLang]['value'];
-       });
-}
+ };
 
 class TranslateComponent extends React.Component<Props, State> {
   constructor(props : Props) {
