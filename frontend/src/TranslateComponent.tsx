@@ -43,7 +43,6 @@ const wikiTranslate = function async
        })
        .then(res => res.json())
        .then(data => {
-         console.log(data);
          let entities = data['entities'];
          let keys = Object.keys(entities);
          let id = '';
@@ -83,7 +82,8 @@ class TranslateComponent extends React.Component<Props, State> {
     this.getOutputTerm()
       .then(outputTerm => this.setState({
         outputTerm: outputTerm
-      }));
+      }))
+      .catch(error => console.log(error));;
   }
 
   getOutputTerm() {
