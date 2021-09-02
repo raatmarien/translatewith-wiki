@@ -14,13 +14,55 @@ interface State {
   outputTerm: string;
 }
 
+const findPage =
+  function (apiUrl : string, search : string) : Promise<string> {
+    // https://www.mediawiki.org/wiki/API:Search
+    let options = '?action=query&list=search&format=json&utf8=1&origin=*';
+    return fetch(apiUrl + options + '&srsearch=' + search)
+      .then(res => res.json())
+      .then(data => {
+        let search = data['query']['search'];
+        if (search.length > 0) {
+          return search[0]['title'];
+        } else {
+          return 'Not found';
+        }
+      });
+  };
+
+const wikiTranslate = function async
+(inLang : string,
+ term : string,
+ outLang : string) : Promise<string> {
+   let apiUrl = 'https://' + inLang + '.wikipedia.org/w/api.php';
+   return findPage(apiUrl, term)
+       .then(title => {
+         let wikiBaseApi = 'https://www.wikidata.org/w/api.php';
+         let options = '?action=wbgetentities&sites=' + inLang + 'wiki&format=json&utf8=1&origin=*';
+         return fetch(wikiBaseApi + options + '&titles=' + title);
+       })
+       .then(res => res.json())
+       .then(data => {
+         console.log(data);
+         let entities = data['entities'];
+         let keys = Object.keys(entities);
+         let id = '';
+         for (let i = 0; i < keys.length; i++) {
+           if (keys[i][0] === 'Q') {
+             id = keys[i];
+           }
+         }
+         return data['entities'][id]['labels'][outLang]['value'];
+       });
+}
+
 class TranslateComponent extends React.Component<Props, State> {
   constructor(props : Props) {
     super(props);
     this.state = {
       inputTerm: '',
-      inputLanguage: 'German',
-      outputLanguage: 'English',
+      inputLanguage: 'de',
+      outputLanguage: 'en',
       outputTerm: ''
     };
   }
@@ -38,13 +80,17 @@ class TranslateComponent extends React.Component<Props, State> {
   }
 
   translate() {
-    this.setState({
-      outputTerm: this.getOutputTerm()
-    });
+    this.getOutputTerm()
+      .then(outputTerm => this.setState({
+        outputTerm: outputTerm
+      }));
   }
 
   getOutputTerm() {
-    return this.state.inputTerm;
+    return wikiTranslate(
+      this.state.inputLanguage,
+      this.state.inputTerm,
+      this.state.outputLanguage);
   }
 
   render() {
