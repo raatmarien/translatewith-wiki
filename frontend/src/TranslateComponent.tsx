@@ -11,37 +11,81 @@ interface State {
   inputTerm: string;
   inputLanguage: string;
   outputLanguage: string;
-  outputTerm: string;
+  outputInfo?: PageInfo;
 }
 
-const findPage =
-  function (apiUrl : string, search : string) : Promise<string> {
+export interface PageInfo {
+  title: string;
+  snippet: string;
+  url: string;
+  redirects: string[];
+}
+
+const baseOptions = '?format=json&utf8=1&origin=*';
+
+const getRedirects = function
+(apiUrl : string,
+ title : string) : Promise<string[]> {
+   let options = baseOptions + '&action=query&prop=redirects&titles=' + title;
+   return fetch(apiUrl + options)
+     .then(res => res.json())
+     .then(data => {
+       let page = unwrapPages(data);
+       let rs = page.redirects;
+       let redirects = [];
+       for (let i = 0; i < rs.length; i++) {
+         redirects.push(rs[i].title);
+       }
+       return redirects;
+     });
+ };
+
+const getPageInfo =
+  function (wikiUrl : string, search : string) : Promise<PageInfo> {
     // https://www.mediawiki.org/wiki/API:Search
-    let options = '?action=query&list=search&format=json&utf8=1&origin=*';
+    let apiUrl = wikiUrl + '/w/api.php';
+    let options = baseOptions + '&action=query&list=search';
     return fetch(apiUrl + options + '&srsearch=' + search)
       .then(res => res.json())
       .then(data => {
         let search = data['query']['search'];
-        if (search.length > 0) {
-          return search[0]['title'];
-        } else {
-          return 'Not found';
-        }
+        return {
+          title: search[0].title,
+          snippet: search[0].snippet,
+          url: wikiUrl + '/wiki/' + search[0].title,
+        };
+      })
+      .then(pageInfo => {
+        return getRedirects(apiUrl, pageInfo.title)
+          .then(redirects => {
+            return {
+              title: pageInfo.title,
+              snippet: pageInfo.snippet,
+              url: pageInfo.url,
+              redirects: redirects
+            };
+          });
       });
   };
 
+const unwrapPages = function(data : any) {
+  let pages = data.query.pages;
+  let pageId = Object.keys(pages)[0];
+  return pages[pageId];
+}
+
 const getDifferentLangTitle = function
-(apiUrl : string,
+(wikiUrl : string,
  title : string,
  outLang : string) : Promise<string> {
    // https://www.mediawiki.org/wiki/API:Langlinks
-   let options = '?action=query&prop=langlinks&format=json&utf8=1&lllang=' + outLang + '&origin=*';
+   let options = baseOptions + '&action=query&prop=langlinks&lllang=' + outLang;
+   let apiUrl = wikiUrl + '/w/api.php';
    return fetch(apiUrl + options + '&titles=' + title + '&llang=' + outLang)
      .then(res => res.json())
      .then(data => {
-       let pages = data.query.pages;
-       let pageId = Object.keys(pages)[0];
-       let langlinks = pages[pageId].langlinks;
+       console.log(unwrapPages(data));
+       let langlinks = unwrapPages(data).langlinks;
        for (let i = 0; i < langlinks.length; i++) {
          if (langlinks[i].lang === outLang) {
            return langlinks[i]['*'];
@@ -53,12 +97,16 @@ const getDifferentLangTitle = function
 const wikiTranslate = function
 (inLang : string,
  term : string,
- outLang : string) : Promise<string> {
-   let apiUrl = 'https://' + inLang + '.wikipedia.org/w/api.php';
-   return findPage(apiUrl, term)
-       .then(title => {
-         return getDifferentLangTitle(apiUrl, title, outLang);
-       })
+ outLang : string) : Promise<PageInfo> {
+   let inApiUrl = 'https://' + inLang + '.wikipedia.org';
+   let outApiUrl = 'https://' + outLang + '.wikipedia.org';
+   return getPageInfo(inApiUrl, term)
+     .then(pageInfo => {
+       return getDifferentLangTitle(inApiUrl, pageInfo.title, outLang);
+     })
+     .then(translation => {
+       return getPageInfo(outApiUrl, translation);
+     });
  };
 
 class TranslateComponent extends React.Component<Props, State> {
@@ -68,7 +116,7 @@ class TranslateComponent extends React.Component<Props, State> {
       inputTerm: '',
       inputLanguage: 'de',
       outputLanguage: 'en',
-      outputTerm: ''
+      outputInfo: undefined,
     };
   }
 
@@ -85,14 +133,14 @@ class TranslateComponent extends React.Component<Props, State> {
   }
 
   translate() {
-    this.getOutputTerm()
-      .then(outputTerm => this.setState({
-        outputTerm: outputTerm
+    this.getOutputInfo()
+      .then(outputInfo => this.setState({
+        outputInfo: outputInfo
       }))
       .catch(error => console.log(error));;
   }
 
-  getOutputTerm() {
+  getOutputInfo() {
     return wikiTranslate(
       this.state.inputLanguage,
       this.state.inputTerm,
@@ -119,7 +167,7 @@ class TranslateComponent extends React.Component<Props, State> {
           onChange={this.setOutputLanguage.bind(this)}
         />
         <TranslateOutput
-          output={this.state.outputTerm}
+          info={this.state.outputInfo}
         />
       </div>
     );
