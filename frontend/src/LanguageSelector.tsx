@@ -1,24 +1,44 @@
 import React from 'react';
+import Select from 'react-select';
 
 interface Props {
-  language: string;
-  onChange: (val: string) => void;
+  language: Language;
+  onChange: (val: Language) => void;
 }
 
 interface State {
 
 }
 
+export interface Language {
+  label: string;
+  value: string;
+}
 
-class LanguageSelector extends React.Component<Props, State> {
+const languageOptions = [
+  {
+    label: 'English',
+    value: 'en',
+  },
+  {
+    label: 'Dutch',
+    value: 'nl',
+  },
+  {
+    label: 'German',
+    value: 'de',
+  }
+];
+
+export class LanguageSelector extends React.Component<Props, State> {
   render() {
     return (
       <div className="language-selector">
         <label htmlFor="language">Language</label>
-        <input name="language" id="language" type="text"
+        <Select
+          options={languageOptions}
           value={this.props.language}
-          onChange={e => this.props.onChange(e.target.value)}
-        />
+          onChange={(v, e) => v && this.props.onChange(v)} />
       </div>
     );
   }

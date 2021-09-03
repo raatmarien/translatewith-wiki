@@ -1,5 +1,5 @@
 import React from 'react';
-import LanguageSelector from './LanguageSelector';
+import {LanguageSelector, Language} from './LanguageSelector';
 import TermInput from './TermInput';
 import TranslateOutput from './TranslateOutput';
 import TranslateButton from './TranslateButton';
@@ -9,8 +9,8 @@ interface Props {
 
 interface State {
   inputTerm: string;
-  inputLanguage: string;
-  outputLanguage: string;
+  inputLanguage: Language;
+  outputLanguage: Language;
   outputInfo?: PageInfo;
 }
 
@@ -114,17 +114,17 @@ class TranslateComponent extends React.Component<Props, State> {
     super(props);
     this.state = {
       inputTerm: '',
-      inputLanguage: 'de',
-      outputLanguage: 'en',
+      inputLanguage: {value: 'nl', label: 'Dutch'},
+      outputLanguage: {value: 'en', label: 'English'},
       outputInfo: undefined,
     };
   }
 
-  setInputLanguage(language : string) {
+  setInputLanguage(language : Language) {
     this.setState({inputLanguage: language});
   }
 
-  setOutputLanguage(language : string) {
+  setOutputLanguage(language : Language) {
     this.setState({outputLanguage: language});
   }
 
@@ -142,9 +142,9 @@ class TranslateComponent extends React.Component<Props, State> {
 
   getOutputInfo() {
     return wikiTranslate(
-      this.state.inputLanguage,
+      this.state.inputLanguage.value,
       this.state.inputTerm,
-      this.state.outputLanguage);
+      this.state.outputLanguage.value);
   }
 
   render() {
