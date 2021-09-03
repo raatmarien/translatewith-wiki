@@ -34,7 +34,6 @@ export class LanguageSelector extends React.Component<Props, State> {
   render() {
     return (
       <div className="language-selector">
-        <label htmlFor="language">Language</label>
         <Select
           options={languageOptions}
           value={this.props.language}

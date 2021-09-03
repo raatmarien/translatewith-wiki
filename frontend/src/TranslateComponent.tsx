@@ -3,6 +3,7 @@ import {LanguageSelector, Language} from './LanguageSelector';
 import TermInput from './TermInput';
 import TranslateOutput from './TranslateOutput';
 import TranslateButton from './TranslateButton';
+import Card from 'react-bootstrap/Card';
 
 interface Props {
 }
@@ -148,19 +149,24 @@ class TranslateComponent extends React.Component<Props, State> {
   }
 
   render() {
+    let cardStyle = {width: '24rem'};
     return (
       <div className="translate-component">
-        <LanguageSelector
-          language={this.state.inputLanguage}
-          onChange={this.setInputLanguage.bind(this)}
-        />
-        <TermInput
-          value={this.state.inputTerm}
-          onChange={this.setInputTerm.bind(this)}
-        />
-        <TranslateButton
-          onClick={this.translate.bind(this)}
-        />
+        <Card style={cardStyle} body>
+          <Card.Title>Translate a concept or term</Card.Title>
+
+          <LanguageSelector
+            language={this.state.inputLanguage}
+            onChange={this.setInputLanguage.bind(this)}
+          />
+          <TermInput
+            value={this.state.inputTerm}
+            onChange={this.setInputTerm.bind(this)}
+          />
+          <TranslateButton
+            onClick={this.translate.bind(this)}
+          />
+        </Card>
 
         <LanguageSelector
           language={this.state.outputLanguage}

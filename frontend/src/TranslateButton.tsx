@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 
 interface Props {
   onClick: () => void;
@@ -6,7 +7,7 @@ interface Props {
 
 function TranslateButton(props: Props) {
   return (
-    <button onClick={props.onClick}>Translate</button>
+    <Button variant="primary" onClick={props.onClick}>Translate</Button>
   );
 }
 

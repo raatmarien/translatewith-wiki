@@ -1,4 +1,5 @@
 import React from 'react';
+import Form from 'react-bootstrap/Form'
 
 interface Props {
   value: string;
@@ -8,8 +9,7 @@ interface Props {
 function LanguageSelector(props: Props) {
   return (
     <div className="term-input">
-      <label htmlFor="term-input">Term to translate:</label>
-      <input name="term-input" id="term-input" type="text"
+      <Form.Control name="term-input" id="term-input" type="text"
         value={props.value}
         onChange={e => props.onChange(e.target.value)}
       />
