@@ -178,7 +178,7 @@ class TranslateComponent extends React.Component<Props, State> {
           <Col>
             <Card style={cardStyle} className="mb-3">
               <Card.Header>
-                <Card.Title>Translation to</Card.Title>
+                <Card.Title>Translate to</Card.Title>
                 <LanguageSelector
                   language={this.state.outputLanguage}
                   onChange={this.setOutputLanguage.bind(this)}
