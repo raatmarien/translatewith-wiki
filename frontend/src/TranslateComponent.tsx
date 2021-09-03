@@ -168,13 +168,20 @@ class TranslateComponent extends React.Component<Props, State> {
           />
         </Card>
 
-        <LanguageSelector
-          language={this.state.outputLanguage}
-          onChange={this.setOutputLanguage.bind(this)}
-        />
-        <TranslateOutput
-          info={this.state.outputInfo}
-        />
+        <Card style={cardStyle}>
+          <Card.Header>
+            <Card.Title>Translation</Card.Title>
+            <LanguageSelector
+              language={this.state.outputLanguage}
+              onChange={this.setOutputLanguage.bind(this)}
+            />
+          </Card.Header>
+          <Card.Body>
+            <TranslateOutput
+              info={this.state.outputInfo}
+            />
+          </Card.Body>
+        </Card>
       </div>
     );
   }

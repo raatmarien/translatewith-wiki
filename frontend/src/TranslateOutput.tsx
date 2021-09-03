@@ -1,5 +1,6 @@
 import React from 'react';
 import { PageInfo } from './TranslateComponent';
+import Card from 'react-bootstrap/Card';
 
 
 interface Props {
@@ -18,14 +19,11 @@ function TranslateOutput(props: Props) {
   if (props.info) {
     return (
       <div className="translate-output">
-        <h2>Translation:</h2>
-        <a href={props.info.url}>{props.info.title}</a>
-        <br />
-        <h3>Snippet:</h3>
-        <div dangerouslySetInnerHTML={createSnippet()} />
+        <Card.Title><a href={props.info.url}>{props.info.title}</a></Card.Title>
 
-        <br />
-        <h3>Redirects:</h3>
+        <Card.Text><div dangerouslySetInnerHTML={createSnippet()} /></Card.Text>
+
+        <b>Redirects:</b>
         <ul>
           {props.info.redirects.map((rd => (<li key={rd}>{rd}</li>)))}
         </ul>
