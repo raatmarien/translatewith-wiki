@@ -34,7 +34,9 @@ function TranslateOutput(props: Props) {
       </div>
     );
   } else {
-    return (<div className="translate-output"></div>);
+    return (<div className="translate-output">
+        <Card.Title>Input some text and press translate</Card.Title>
+    </div>);
   }
 }
 
