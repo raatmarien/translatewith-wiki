@@ -151,7 +151,7 @@ class TranslateComponent extends React.Component<Props, State> {
   }
 
   render() {
-    let cardStyle = {width: '35rem'};
+    let cardStyle = { minWidth: '20rem', maxWidth: '100%'};
     return (
       <div className="translate-component">
         <Row>
