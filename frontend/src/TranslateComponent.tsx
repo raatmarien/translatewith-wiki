@@ -157,16 +157,18 @@ class TranslateComponent extends React.Component<Props, State> {
         <Row>
           <Col>
             <Card style={cardStyle} className="mb-3" body>
-              <Card.Title>Translate a concept or term</Card.Title>
+              <Card.Title>Translate a concept or term from</Card.Title>
 
               <LanguageSelector
                 language={this.state.inputLanguage}
                 onChange={this.setInputLanguage.bind(this)}
               />
-              <TermInput
-                value={this.state.inputTerm}
-                onChange={this.setInputTerm.bind(this)}
-              />
+              <div className="mb-3 mt-3">
+                <TermInput
+                  value={this.state.inputTerm}
+                  onChange={this.setInputTerm.bind(this)}
+                />
+              </div>
               <TranslateButton
                 onClick={this.translate.bind(this)}
               />
@@ -176,7 +178,7 @@ class TranslateComponent extends React.Component<Props, State> {
           <Col>
             <Card style={cardStyle} className="mb-3">
               <Card.Header>
-                <Card.Title>Translation</Card.Title>
+                <Card.Title>Translation to</Card.Title>
                 <LanguageSelector
                   language={this.state.outputLanguage}
                   onChange={this.setOutputLanguage.bind(this)}
