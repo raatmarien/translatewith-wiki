@@ -1,36 +1,58 @@
 import React from 'react';
-import { PageInfo } from './TranslateComponent';
 import Card from 'react-bootstrap/Card';
 
 
 interface Props {
-  info?: PageInfo
+  title?: string;
+  url?: string;
+  imageUrl?: string;
+  snippet?: string;
+  redirects?: string[];
+}
+
+function getTitle(props: Props) {
+  return (<Card.Title><a href={props.url}>{props.title}</a></Card.Title>);
+}
+
+function getImage(props: Props) {
+  return (<Card.Img variant="top" src={props.imageUrl} />);
+}
+
+function getSnippet(props: Props) {
+  return (<Card.Text dangerouslySetInnerHTML={createSnippet(props)}></Card.Text>);
+}
+
+function getRedirects(props: Props) {
+  return props.redirects && (
+    <div>
+      <b>Redirects:</b>
+      <ul>
+        {props.redirects.map((rd => (<li key={rd}>{rd}</li>)))}
+      </ul>
+    </div>);
+}
+
+function createSnippet(props : Props) {
+  if (props.snippet) {
+    return { __html: props.snippet };
+  } else {
+    return { __html: '' }
+  }
 }
 
 function TranslateOutput(props: Props) {
-  let createSnippet = function() {
-    if (props.info) {
-      return { __html: props.info.snippet };
-    } else {
-      return { __html: '' }
-    }
-  }
 
-  if (props.info) {
+  if (props.title || props.imageUrl || props.snippet ||
+      (props.redirects && props.redirects.length > 0)) {
     return (
       <div className="translate-output">
-        <Card.Title><a href={props.info.url}>{props.info.title}</a></Card.Title>
+        {props.title && getTitle(props)}
 
-        {props.info.imageUrl && (
-           <Card.Img variant="top" src={props.info.imageUrl} />)
-        }
+        {props.imageUrl && getImage(props)}
 
-        <Card.Text><div dangerouslySetInnerHTML={createSnippet()} /></Card.Text>
+        {props.snippet && getSnippet(props)}
 
-        <b>Redirects:</b>
-        <ul>
-          {props.info.redirects.map((rd => (<li key={rd}>{rd}</li>)))}
-        </ul>
+        {props.redirects && props.redirects.length > 0 && getRedirects(props)}
       </div>
     );
   } else {
