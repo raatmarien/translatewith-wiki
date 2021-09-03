@@ -4,6 +4,8 @@ import TermInput from './TermInput';
 import TranslateOutput from './TranslateOutput';
 import TranslateButton from './TranslateButton';
 import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 interface Props {
 }
@@ -149,39 +151,45 @@ class TranslateComponent extends React.Component<Props, State> {
   }
 
   render() {
-    let cardStyle = {width: '24rem'};
+    let cardStyle = {width: '35rem'};
     return (
       <div className="translate-component">
-        <Card style={cardStyle} body>
-          <Card.Title>Translate a concept or term</Card.Title>
+        <Row>
+          <Col>
+            <Card style={cardStyle} className="mb-3" body>
+              <Card.Title>Translate a concept or term</Card.Title>
 
-          <LanguageSelector
-            language={this.state.inputLanguage}
-            onChange={this.setInputLanguage.bind(this)}
-          />
-          <TermInput
-            value={this.state.inputTerm}
-            onChange={this.setInputTerm.bind(this)}
-          />
-          <TranslateButton
-            onClick={this.translate.bind(this)}
-          />
-        </Card>
+              <LanguageSelector
+                language={this.state.inputLanguage}
+                onChange={this.setInputLanguage.bind(this)}
+              />
+              <TermInput
+                value={this.state.inputTerm}
+                onChange={this.setInputTerm.bind(this)}
+              />
+              <TranslateButton
+                onClick={this.translate.bind(this)}
+              />
+            </Card>
+          </Col>
 
-        <Card style={cardStyle}>
-          <Card.Header>
-            <Card.Title>Translation</Card.Title>
-            <LanguageSelector
-              language={this.state.outputLanguage}
-              onChange={this.setOutputLanguage.bind(this)}
-            />
-          </Card.Header>
-          <Card.Body>
-            <TranslateOutput
-              info={this.state.outputInfo}
-            />
-          </Card.Body>
-        </Card>
+          <Col>
+            <Card style={cardStyle} className="mb-3">
+              <Card.Header>
+                <Card.Title>Translation</Card.Title>
+                <LanguageSelector
+                  language={this.state.outputLanguage}
+                  onChange={this.setOutputLanguage.bind(this)}
+                />
+              </Card.Header>
+              <Card.Body>
+                <TranslateOutput
+                  info={this.state.outputInfo}
+                />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </div>
     );
   }
