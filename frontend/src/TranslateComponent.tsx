@@ -22,6 +22,7 @@ export interface PageInfo {
   snippet: string;
   url: string;
   redirects: string[];
+  imageUrl: string;
 }
 
 const baseOptions = '?format=json&utf8=1&origin=*';
@@ -43,11 +44,34 @@ const getRedirects = function
      });
  };
 
+const getImage = function
+(apiUrl : string,
+ title : string) : Promise<string> {
+   let options = baseOptions + '&action=query&prop=images&titles=' + title;
+   return fetch(apiUrl + options)
+     .then(res => res.json())
+     .then(data => {
+       let page = unwrapPages(data);
+       let images = page.images;
+       if (images.length > 0) {
+         let options = baseOptions + '&action=query&prop=imageinfo&iiprop=url&titles=' + images[0].title;
+         return fetch(apiUrl + options)
+           .then(res => res.json())
+           .then(data => {
+             let page = unwrapPages(data);
+             return page.imageinfo[0].url;
+           });
+       }
+       return ''
+     });
+ }
+
 const getPageInfo =
   function (wikiUrl : string, search : string) : Promise<PageInfo> {
     // https://www.mediawiki.org/wiki/API:Search
     let apiUrl = wikiUrl + '/w/api.php';
     let options = baseOptions + '&action=query&list=search';
+    let pRedirects : string[] = [];
     return fetch(apiUrl + options + '&srsearch=' + search)
       .then(res => res.json())
       .then(data => {
@@ -61,11 +85,16 @@ const getPageInfo =
       .then(pageInfo => {
         return getRedirects(apiUrl, pageInfo.title)
           .then(redirects => {
+            pRedirects = redirects;
+            return getImage(apiUrl, pageInfo.title);
+          })
+          .then(imageUrl => {
             return {
               title: pageInfo.title,
               snippet: pageInfo.snippet,
               url: pageInfo.url,
-              redirects: redirects
+              redirects: pRedirects,
+              imageUrl: imageUrl
             };
           });
       });

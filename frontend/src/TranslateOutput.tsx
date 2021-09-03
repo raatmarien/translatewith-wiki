@@ -21,6 +21,10 @@ function TranslateOutput(props: Props) {
       <div className="translate-output">
         <Card.Title><a href={props.info.url}>{props.info.title}</a></Card.Title>
 
+        {props.info.imageUrl && (
+           <Card.Img variant="top" src={props.info.imageUrl} />)
+        }
+
         <Card.Text><div dangerouslySetInnerHTML={createSnippet()} /></Card.Text>
 
         <b>Redirects:</b>
