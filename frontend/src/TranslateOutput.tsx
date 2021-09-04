@@ -28,7 +28,7 @@ function getSnippet(props: Props) {
 function getRedirects(props: Props) {
   return props.redirects && (
     <div>
-      <b>Redirects:</b>
+      <b>Other phrases that redirect to the same page:</b>
       <ul>
         {props.redirects.map((rd => (<li key={rd}>{rd}</li>)))}
       </ul>
