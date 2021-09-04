@@ -14,6 +14,7 @@ interface Props {
   articles?: Page[];
   selected: number;
   onChange: (val : number) => void;
+  autoDetectOn: boolean;
 };
 
 interface State {
@@ -70,6 +71,20 @@ export class ArticlePossibilities extends React.Component<Props, State> {
                   onChange={this.props.onChange}
                 />
               </ListGroup>
+            </Card.Body>
+          </Card>
+        </div>);
+    } else if (this.props.articles && this.props.autoDetectOn) {
+      return (
+        <div className="article-possibilities">
+          <Card style={cardStyle} className="mb-3">
+            <Card.Body>
+              <Alert variant="danger">
+                <b>No results found.</b> Translate using 'Detect language'
+                only works when the exact input is an article on
+                Wikipedia. Try selecting the language you are
+                translating from above to get more results.
+              </Alert>
             </Card.Body>
           </Card>
         </div>);

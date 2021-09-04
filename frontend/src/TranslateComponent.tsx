@@ -140,6 +140,7 @@ class TranslateComponent extends React.Component<Props, State> {
         articles={this.state.articlePossibilities}
         selected={this.state.articleSelected}
         onChange={this.setArticleSelected.bind(this)}
+        autoDetectOn={this.state.inputLanguage.value === 'auto'}
       />);
     return (
       <div className="translate-component">
