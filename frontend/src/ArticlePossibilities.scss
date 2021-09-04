@@ -75,4 +75,17 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
+    .list-group-item {
+        padding: 8px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    @media (max-width: 1200px) {
+        .card-body {
+            max-height: 170px;
+            overflow-y: auto;
+        }
+    }
 }
