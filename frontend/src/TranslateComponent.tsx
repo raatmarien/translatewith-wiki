@@ -161,6 +161,12 @@ class TranslateComponent extends React.Component<Props, State> {
                 <TermInput
                   value={this.state.inputTerm}
                   onChange={this.setInputTerm.bind(this)}
+                  onKeyPress={(e : any) => {
+                      if (e.key === 'Enter') {
+                        this.findOptions();
+                      }
+                      return true;
+                    }}
                 />
                 <br />
                 <TranslateButton
