@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
 
 interface Props {
   title?: string;
@@ -8,6 +9,8 @@ interface Props {
   imageUrl?: string;
   snippet?: string;
   redirects?: string[];
+
+  translateStarted: boolean;
 }
 
 function getTitle(props: Props) {
@@ -55,6 +58,14 @@ function TranslateOutput(props: Props) {
         {props.redirects && props.redirects.length > 0 && getRedirects(props)}
       </div>
     );
+  } else if (props.translateStarted) {
+    return (<Loader
+              className="text-center"
+              type="TailSpin"
+              color="#00BFFF"
+              height={60}
+              width={60}
+            />);
   } else {
     return (<div className="translate-output">
         <Card.Title>Input some text and press translate</Card.Title>

@@ -15,11 +15,19 @@ interface State {
   inputLanguage: Language;
   outputLanguage: Language;
 
+  translateStarted: boolean;
+
   outputTitle?: string;
   outputUrl?: string;
   outputSnippet?: string;
   outputImageUrl?: string;
   outputRedirects?: string[];
+}
+
+interface Page {
+  title: string;
+  snippet: string;
+  url: string;
 }
 
 const baseOptions = '?format=json&utf8=1&origin=*';
@@ -61,34 +69,44 @@ const getImage = function
        }
        return ''
      });
- }
+ };
 
-const getPageInfo =
-  function (wikiUrl : string, search : string, setState : any)
-  : Promise<string> {
-    // https://www.mediawiki.org/wiki/API:Search
+const searchPage =
+  function(wikiUrl : string, search : string)
+  : Promise<Page> {
     let apiUrl = wikiUrl + '/w/api.php';
     let options = baseOptions + '&action=query&list=search';
     return fetch(apiUrl + options + '&srsearch=' + search)
       .then(res => res.json())
       .then(data => {
         let search = data['query']['search'];
+        return {
+          title: search[0].title,
+          snippet: search[0].snippet,
+          url: wikiUrl + '/wiki/' + search[0].title,
+        };
+      });
+  };
+
+const getExtraPageInfo =
+  function (wikiUrl : string, title : string, setState : any) {
+    // https://www.mediawiki.org/wiki/API:Search
+    let apiUrl = wikiUrl + '/w/api.php';
+    searchPage(wikiUrl, title)
+      .then(page => {
         setState({
-          outputSnippet: search[0].snippet,
-          outputUrl: wikiUrl + '/wiki/' + search[0].title,
+          outputTitle: page.title,
+          outputUrl: page.url,
+          outputSnippet: page.snippet,
         });
-        return search[0].title;
-      })
-      .then(title => {
-        return getRedirects(apiUrl, title)
-          .then(redirects => {
-            setState({outputRedirects: redirects});
-            return getImage(apiUrl, title);
-          })
-          .then(imageUrl => {
-            setState({outputImageUrl: imageUrl});
-            return title;
-          });
+      });
+    getRedirects(apiUrl, title)
+      .then(redirects => {
+        setState({outputRedirects: redirects});
+      });
+    getImage(apiUrl, title)
+      .then(imageUrl => {
+        setState({outputImageUrl: imageUrl});
       });
   };
 
@@ -124,13 +142,13 @@ const wikiTranslate = function
  setState : any) : Promise<any> {
    let inApiUrl = 'https://' + inLang + '.wikipedia.org';
    let outApiUrl = 'https://' + outLang + '.wikipedia.org';
-   return getPageInfo(inApiUrl, term, () => 1)
-     .then(title => {
-       return getDifferentLangTitle(inApiUrl, title, outLang);
+   return searchPage(inApiUrl, term)
+     .then(page => {
+       return getDifferentLangTitle(inApiUrl, page.title, outLang);
      })
      .then(translation => {
        setState({ outputTitle: translation });
-       return getPageInfo(outApiUrl, translation, setState);
+       return getExtraPageInfo(outApiUrl, translation, setState);
      });
  };
 
@@ -141,6 +159,7 @@ class TranslateComponent extends React.Component<Props, State> {
       inputTerm: '',
       inputLanguage: {value: 'nl', label: 'Dutch'},
       outputLanguage: {value: 'en', label: 'English'},
+      translateStarted: false,
     };
   }
 
@@ -158,6 +177,7 @@ class TranslateComponent extends React.Component<Props, State> {
 
   translate() {
     this.setState({
+      translateStarted: true,
       outputTitle: undefined,
       outputUrl: undefined,
       outputSnippet: undefined,
@@ -216,6 +236,8 @@ class TranslateComponent extends React.Component<Props, State> {
                   imageUrl={this.state.outputImageUrl}
                   snippet={this.state.outputSnippet}
                   redirects={this.state.outputRedirects}
+                  
+                  translateStarted={this.state.translateStarted}
                 />
               </Card.Body>
             </Card>
