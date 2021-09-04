@@ -14,7 +14,7 @@ interface Props {
 }
 
 function getTitle(props: Props) {
-  return (<Card.Title><a href={props.url}>{props.title}</a></Card.Title>);
+  return (<Card.Title><a target="_blank" href={props.url}>{props.title}</a></Card.Title>);
 }
 
 function getImage(props: Props) {
@@ -37,7 +37,8 @@ function getRedirects(props: Props) {
 
 function createSnippet(props : Props) {
   if (props.snippet) {
-    return { __html: props.snippet };
+    return { __html: props.snippet + '... <a target="_blank" href="' + props.url +
+                     '">Read more</a>'};
   } else {
     return { __html: '' }
   }

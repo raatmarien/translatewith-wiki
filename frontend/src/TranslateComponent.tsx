@@ -90,7 +90,6 @@ const searchPage =
 
 const getExtraPageInfo =
   function (wikiUrl : string, title : string, setState : any) {
-    // https://www.mediawiki.org/wiki/API:Search
     let apiUrl = wikiUrl + '/w/api.php';
     searchPage(wikiUrl, title)
       .then(page => {
