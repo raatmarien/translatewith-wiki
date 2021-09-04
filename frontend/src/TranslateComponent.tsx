@@ -18,6 +18,7 @@ interface Props {
 
 interface State {
   api: WikiApi;
+  oneColumn: boolean;
 
   inputTerm: string;
   inputLanguage: Language;
@@ -41,12 +42,22 @@ class TranslateComponent extends React.Component<Props, State> {
     super(props);
     this.state = {
       api: new WikiApi(this.setState.bind(this)),
+      oneColumn: false,
       inputTerm: '',
       inputLanguage: {value: 'nl', label: 'Dutch'},
       outputLanguage: {value: 'en', label: 'English'},
       translateStarted: false,
       articleSelected: 0,
     };
+  }
+
+  componentDidMount() {
+    window.addEventListener("resize", this.resize.bind(this));
+    this.resize();
+  }
+
+  resize() {
+    this.setState({oneColumn: window.innerWidth < 1200});
   }
 
   setInputLanguage(language : Language) {
@@ -107,10 +118,17 @@ class TranslateComponent extends React.Component<Props, State> {
 
   render() {
     let cardStyle = { minWidth: '20rem', maxWidth: '100%'};
+    let possibilities = (
+      <ArticlePossibilities
+        articles={this.state.articlePossibilities}
+        selected={this.state.articleSelected}
+        onChange={this.setArticleSelected.bind(this)}
+      />);
     return (
       <div className="translate-component">
         <Row>
           <Col>
+            {this.state.oneColumn && possibilities}
             <Card style={cardStyle} className="mb-3">
               <Card.Header>
                 <Card.Title>Translate a concept or term from</Card.Title>
@@ -131,11 +149,7 @@ class TranslateComponent extends React.Component<Props, State> {
                 />
               </Card.Body>
             </Card>
-            <ArticlePossibilities
-              articles={this.state.articlePossibilities}
-              selected={this.state.articleSelected}
-              onChange={this.setArticleSelected.bind(this)}
-            />
+            {!this.state.oneColumn && possibilities}
           </Col>
 
           <Col>
