@@ -14,7 +14,7 @@ interface Props {
 }
 
 function getTitle(props: Props) {
-  return (<Card.Title><a target="_blank" href={props.url}>{props.title}</a></Card.Title>);
+  return (<Card.Title>{props.title}</Card.Title>);
 }
 
 function getImage(props: Props) {
