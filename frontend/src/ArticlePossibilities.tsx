@@ -4,6 +4,7 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
+import Alert from 'react-bootstrap/Alert';
 
 import List from 'react-list-select'
 
@@ -35,9 +36,10 @@ export class ArticlePossibilities extends React.Component<Props, State> {
           <ListGroup.Item>
             <div>
               {this.props.articles[i].title}
-              <Badge className="float-right" bg="secondary">
-                {this.props.articles[i].language.value}
-              </Badge>
+              {this.props.articles[i].languages.map(l => (
+                 <Badge key={l.value} className="float-right" bg="secondary">
+                   {l.value}
+                 </Badge>))}
             </div>
 
             <div className="snippet small"
@@ -76,7 +78,9 @@ export class ArticlePossibilities extends React.Component<Props, State> {
         <div className="article-possibilities">
           <Card style={cardStyle} className="mb-3">
             <Card.Body>
-              <Card.Title>No results found</Card.Title>
+              <Alert variant="danger">
+                No results found, did you select the right language?
+              </Alert>
             </Card.Body>
           </Card>
         </div>);

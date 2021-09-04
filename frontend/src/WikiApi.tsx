@@ -4,7 +4,7 @@ export interface Page {
   title: string;
   snippet: string;
   url: string;
-  language: Language;
+  languages: Language[];
   imageUrl?: string;
 }
 
@@ -68,6 +68,58 @@ export class WikiApi {
       });
    };
 
+  private normalizeTitle(title : String) : string {
+    return title.charAt(0).toUpperCase() + title.slice(1);
+  }
+
+  private getLanguageSites() : string {
+    let sites = languages.map(l => l.value + 'wiki');
+    let str = '';
+    for (let i = 0; i < sites.length - 1; i++) {
+      str += sites[i] + '|';
+    }
+    str += sites[sites.length - 1];
+    return str;
+  }
+
+  private searchPagesAutoLanguage(search : string) : Promise<Page[]> {
+    let apiUrl = 'https://www.wikidata.org/w/api.php';
+    let normalizedTitle = this.normalizeTitle(search)
+    let options = this.baseOptions + '&action=wbgetentities&props=sitelinks'
+                + '&sites=' + this.getLanguageSites()
+                + '&titles=' + normalizedTitle;
+    return fetch(apiUrl + options)
+      .then(res => res.json())
+      .then(data => {
+        let keys = Object.keys(data.entities);
+        let pages = []
+        for (let i = 0; i < keys.length; i++) {
+          let articleLinks = data.entities[keys[i]].sitelinks;
+          if (articleLinks) {
+            let wikis = Object.keys(articleLinks);
+            let articleLanguages = []
+            for (let j = 0; j < wikis.length; j++) {
+              let article = articleLinks[wikis[j]];
+              if (article.title === normalizedTitle) {
+                let languageCode = article.site.replace('wiki', '');
+                let language = languages.find(l => l.value === languageCode);
+                if (language) articleLanguages.push(language);
+              }
+            }
+            if (articleLanguages.length > 0) {
+              pages.push({
+                title: normalizedTitle,
+                snippet: '',
+                url: '',
+                languages: articleLanguages,
+              });
+            }
+          }
+        }
+        return pages;
+      });
+  }
+
   private searchPages(language: Language, search : string) : Promise<Page[]> {
     let wikiUrl = 'https://' + language.value + '.wikipedia.org';
     let apiUrl = wikiUrl + '/w/api.php';
@@ -82,7 +134,7 @@ export class WikiApi {
             title: search[i].title,
             snippet: search[i].snippet,
             url: wikiUrl + '/wiki/' + search[i].title,
-            language: language,
+            languages: [language],
           });
         }
         return pages;
@@ -147,10 +199,15 @@ export class WikiApi {
   };
 
   public findTermOptions(lang : Language, term : string) : Promise<any> {
-    return this.searchPages(lang, term)
-      .then(pages => {
-        this.setState({articlePossibilities: pages});
-      });
+    if (lang.value === 'auto') {
+      return this.searchPagesAutoLanguage(term)
+                 .then(pages => this.setState({articlePossibilities: pages}));
+    } else {
+      return this.searchPages(lang, term)
+                 .then(pages => {
+                   this.setState({articlePossibilities: pages});
+                 });
+    }
   }
   
   public wikiTranslate(inLang : Language, title : string, outLang : Language)

@@ -126,7 +126,7 @@ class TranslateComponent extends React.Component<Props, State> {
       });
 
       this.state.api.wikiTranslate(
-        this.state.inputLanguage,
+        this.state.articlePossibilities[this.state.articleSelected].languages[0],
         this.state.articlePossibilities[this.state.articleSelected].title,
         this.state.outputLanguage)
           .catch(error => console.log(error));
@@ -153,6 +153,7 @@ class TranslateComponent extends React.Component<Props, State> {
                 <LanguageSelector
                   language={this.state.inputLanguage}
                   onChange={this.setInputLanguage.bind(this)}
+                  addAuto={true}
                 />
               </Card.Header>
               <Card.Body>
