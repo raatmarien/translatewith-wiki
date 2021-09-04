@@ -132,12 +132,13 @@ export class WikiApi {
       .then(data => {
         let languageTitles = [];
         let langlinks = this.unwrapPages(data).langlinks;
-        for (let i = 0; i < langlinks.length; i++) {
-          let language = languages.find(l => l.value === langlinks[i].lang);
+        for (let i = 0; langlinks && i < langlinks.length; i++) {
+          let link = langlinks[i];
+          let language = languages.find(l => l.value === link.lang);
           if (language) {
             languageTitles.push({
               language: language,
-              title: langlinks[i]['*'],
+              title: link['*'],
             });
           }
         }
