@@ -46,7 +46,7 @@ class TranslateComponent extends React.Component<Props, State> {
       api: new WikiApi(this.setState.bind(this)),
       oneColumn: false,
       inputTerm: '',
-      inputLanguage: {value: 'nl', label: 'Dutch'},
+      inputLanguage: {value: 'auto', label: 'Detect language'},
       outputLanguage: {value: 'en', label: 'English'},
       translateStarted: false,
       articleSelected: 0,
