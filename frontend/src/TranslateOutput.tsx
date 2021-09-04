@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
+import Alert from 'react-bootstrap/Alert';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import Language from "./Language";
@@ -52,19 +53,23 @@ function TranslateOutput(props: Props) {
     if (props.languageAlternatives.length > 0) {
       return (
         <div className="translate-output">
-          This article isn't translated in your chosen language, but
-          it is translated in the languages below. You can
-          either select one of these above or select another article.
+          <Alert variant="warning">
+            This article isn't translated in your chosen language, but
+            it is translated in the languages below. You can
+            either select one of these above or select another article.
 
-          <ul>
-            {props.languageAlternatives.map(l => (<li key={l.value}>{l.label}</li>))}
-          </ul>
+            <ul>
+              {props.languageAlternatives.map(l => (<li key={l.value}>{l.label}</li>))}
+            </ul>
+          </Alert>
         </div>);
     } else {
       return (
         <div className="translate-output">
-          This article isn't translated into any of our languages,
-          select another one.
+          <Alert variant="warning">
+            This article isn't translated into any of our languages,
+            select another one.
+          </Alert>
         </div>);
     }
   } else if (props.title || props.imageUrl || props.snippet ||
