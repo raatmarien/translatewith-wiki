@@ -161,7 +161,7 @@ export class WikiApi {
       .then(redirects => {
         this.setState({outputRedirects: redirects});
       });
-    this.getImage(apiUrl, title)
+    return this.getImage(apiUrl, title)
       .then(imageUrl => {
         this.setState({outputImageUrl: imageUrl});
       });
@@ -212,6 +212,11 @@ export class WikiApi {
   
   public wikiTranslate(inLang : Language, title : string, outLang : Language)
   : Promise<any> {
+    if (inLang.value === outLang.value) {
+      this.setState({outputTitle: title});
+      return this.getExtraPageInfo(outLang, title);
+    }
+
     let inApiUrl = 'https://' + inLang.value + '.wikipedia.org';
     return this.getDifferentLangTitles(inApiUrl, title)
                .then(langTitles => {
