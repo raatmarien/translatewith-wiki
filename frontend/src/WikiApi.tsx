@@ -1,4 +1,4 @@
-import Language from './Language';
+import {Language, languages} from './Language';
 
 export interface Page {
   title: string;
@@ -6,6 +6,11 @@ export interface Page {
   url: string;
   language: Language;
   imageUrl?: string;
+}
+
+interface LanguageTitle {
+  language: Language;
+  title: string;
 }
 
 export class WikiApi {
@@ -25,13 +30,20 @@ export class WikiApi {
       .then(data => {
         let page = this.unwrapPages(data);
         let rs = page.redirects;
-        let redirects = [];
-        for (let i = 0; i < rs.length; i++) {
-          redirects.push(rs[i].title);
+        if (rs) {
+          let redirects = [];
+          for (let i = 0; i < rs.length; i++) {
+            redirects.push(rs[i].title);
+          }
+          return redirects;
         }
-        return redirects;
+        return [];
       });
    };
+
+  private notStandardImage(image : any) : boolean {
+    return image.title !== 'File:Commons-logo.svg';
+  }
 
   private getImage(apiUrl : string, title : string) : Promise<string> {
     let options = this.baseOptions + '&action=query&prop=images&titles=' + title;
@@ -39,7 +51,7 @@ export class WikiApi {
       .then(res => res.json())
       .then(data => {
         let page = this.unwrapPages(data);
-        let images = page.images;
+        let images = page.images.filter(this.notStandardImage);
         if (images.length > 0) {
           let options =
             this.baseOptions
@@ -109,21 +121,27 @@ export class WikiApi {
     return pages[pageId];
   }
 
-  private getDifferentLangTitle(wikiUrl : string, title : string, outLang : string)
-  : Promise<string> {
+  private getDifferentLangTitles(wikiUrl : string, title : string)
+  : Promise<LanguageTitle[]> {
     // https://www.mediawiki.org/wiki/API:Langlinks
     let options = this.baseOptions
-                + '&action=query&prop=langlinks&lllang=' + outLang;
+                + '&action=query&prop=langlinks';
     let apiUrl = wikiUrl + '/w/api.php';
-    return fetch(apiUrl + options + '&titles=' + title + '&llang=' + outLang)
+    return fetch(apiUrl + options + '&titles=' + title)
       .then(res => res.json())
       .then(data => {
+        let languageTitles = [];
         let langlinks = this.unwrapPages(data).langlinks;
         for (let i = 0; i < langlinks.length; i++) {
-          if (langlinks[i].lang === outLang) {
-            return langlinks[i]['*'];
+          let language = languages.find(l => l.value === langlinks[i].lang);
+          if (language) {
+            languageTitles.push({
+              language: language,
+              title: langlinks[i]['*'],
+            });
           }
         }
+        return languageTitles;
       });
   };
 
@@ -137,10 +155,18 @@ export class WikiApi {
   public wikiTranslate(inLang : Language, title : string, outLang : Language)
   : Promise<any> {
     let inApiUrl = 'https://' + inLang.value + '.wikipedia.org';
-    return this.getDifferentLangTitle(inApiUrl, title, outLang.value)
-               .then(translation => {
-                 this.setState({ outputTitle: translation });
-                 return this.getExtraPageInfo(outLang, translation);
+    return this.getDifferentLangTitles(inApiUrl, title)
+               .then(langTitles => {
+                 let correct = langTitles.find(lt => lt.language.value === outLang.value);
+                 if (correct) {
+                   this.setState({ outputTitle: correct.title });
+                   return this.getExtraPageInfo(outLang, correct.title);
+                 } else {
+                   this.setState({
+                     outputLanguageAlternatives
+                     : langTitles.map(lt => lt.language)});
+                   return undefined;
+                 }
                });
   };
 }

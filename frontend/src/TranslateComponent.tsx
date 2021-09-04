@@ -29,6 +29,8 @@ interface State {
   articlePossibilities?: Page[];
   articleSelected: number;
 
+  outputLanguageAlternatives?: Language[];
+  
   outputTitle?: string;
   outputUrl?: string;
   outputSnippet?: string;
@@ -81,6 +83,7 @@ class TranslateComponent extends React.Component<Props, State> {
       translateStarted: true,
       articleSelected: 0,
 
+      outputLanguageAlternatives: undefined,
       outputTitle: undefined,
       outputUrl: undefined,
       outputSnippet: undefined,
@@ -101,6 +104,7 @@ class TranslateComponent extends React.Component<Props, State> {
       this.setState({
         translateStarted: true,
 
+        outputLanguageAlternatives: undefined,
         outputTitle: undefined,
         outputUrl: undefined,
         outputSnippet: undefined,
@@ -163,12 +167,13 @@ class TranslateComponent extends React.Component<Props, State> {
               </Card.Header>
               <Card.Body>
                 <TranslateOutput
+                  languageAlternatives={this.state.outputLanguageAlternatives}
                   title={this.state.outputTitle}
                   url={this.state.outputUrl}
                   imageUrl={this.state.outputImageUrl}
                   snippet={this.state.outputSnippet}
                   redirects={this.state.outputRedirects}
-                  
+
                   translateStarted={this.state.translateStarted}
                 />
               </Card.Body>

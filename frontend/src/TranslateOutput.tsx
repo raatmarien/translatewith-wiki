@@ -2,8 +2,11 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
+import Language from "./Language";
 
 interface Props {
+  languageAlternatives?: Language[];
+
   title?: string;
   url?: string;
   imageUrl?: string;
@@ -45,8 +48,26 @@ function createSnippet(props : Props) {
 }
 
 function TranslateOutput(props: Props) {
+  if (props.languageAlternatives) {
+    if (props.languageAlternatives.length > 0) {
+      return (
+        <div className="translate-output">
+          This article isn't translated in your chosen language, but
+          it is translated in the languages below. You can
+          either select one of these above or select another article.
 
-  if (props.title || props.imageUrl || props.snippet ||
+          <ul>
+            {props.languageAlternatives.map(l => (<li key={l.value}>{l.label}</li>))}
+          </ul>
+        </div>);
+    } else {
+      return (
+        <div className="translate-output">
+          This article isn't translated into any of our languages,
+          select another one.
+        </div>);
+    }
+  } else if (props.title || props.imageUrl || props.snippet ||
       (props.redirects && props.redirects.length > 0)) {
     return (
       <div className="translate-output">
