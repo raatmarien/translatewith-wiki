@@ -1,11 +1,14 @@
 import React from 'react';
+
+import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 import {LanguageSelector, Language} from './LanguageSelector';
 import TermInput from './TermInput';
 import TranslateOutput from './TranslateOutput';
 import TranslateButton from './TranslateButton';
-import Card from 'react-bootstrap/Card';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { ArticlePossibilities, Article } from './ArticlePossibilities';
 
 interface Props {
 }
@@ -16,6 +19,8 @@ interface State {
   outputLanguage: Language;
 
   translateStarted: boolean;
+
+  articlePossibilities?: string;
 
   outputTitle?: string;
   outputUrl?: string;
@@ -217,6 +222,8 @@ class TranslateComponent extends React.Component<Props, State> {
                 />
               </Card.Body>
             </Card>
+            <ArticlePossibilities
+              articles={undefined} />
           </Col>
 
           <Col>
