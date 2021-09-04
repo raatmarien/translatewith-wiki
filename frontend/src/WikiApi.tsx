@@ -1,7 +1,10 @@
+import Language from './Language';
+
 export interface Page {
   title: string;
   snippet: string;
   url: string;
+  language: Language;
   imageUrl?: string;
 }
 
@@ -53,7 +56,8 @@ export class WikiApi {
       });
    };
 
-  private searchPages(wikiUrl : string, search : string) : Promise<Page[]> {
+  private searchPages(language: Language, search : string) : Promise<Page[]> {
+    let wikiUrl = 'https://' + language.value + '.wikipedia.org';
     let apiUrl = wikiUrl + '/w/api.php';
     let options = this.baseOptions + '&action=query&list=search';
     return fetch(apiUrl + options + '&srsearch=' + search)
@@ -66,20 +70,22 @@ export class WikiApi {
             title: search[i].title,
             snippet: search[i].snippet,
             url: wikiUrl + '/wiki/' + search[i].title,
+            language: language,
           });
         }
         return pages;
       });
   }
 
-  private searchPage(wikiUrl : string, search : string) : Promise<Page> {
-    return this.searchPages(wikiUrl, search)
+  private searchPage(language : Language, search : string) : Promise<Page> {
+    return this.searchPages(language, search)
                .then(pages => pages[0]);
   }
 
-  private getExtraPageInfo(wikiUrl : string, title : string) {
+  private getExtraPageInfo(language : Language, title : string) {
+    let wikiUrl = 'https://' + language.value + '.wikipedia.org';
     let apiUrl = wikiUrl + '/w/api.php';
-    this.searchPage(wikiUrl, title)
+    this.searchPage(language, title)
       .then(page => {
         this.setState({
           outputTitle: page.title,
@@ -121,22 +127,20 @@ export class WikiApi {
       });
   };
 
-  public findTermOptions(lang : string, term : string) : Promise<any> {
-    let wikiUrl = 'https://' + lang + '.wikipedia.org';
-    return this.searchPages(wikiUrl, term)
+  public findTermOptions(lang : Language, term : string) : Promise<any> {
+    return this.searchPages(lang, term)
       .then(pages => {
         this.setState({articlePossibilities: pages});
       });
   }
   
-  public wikiTranslate(inLang : string, title : string, outLang : string)
+  public wikiTranslate(inLang : Language, title : string, outLang : Language)
   : Promise<any> {
-    let inApiUrl = 'https://' + inLang + '.wikipedia.org';
-    let outApiUrl = 'https://' + outLang + '.wikipedia.org';
-    return this.getDifferentLangTitle(inApiUrl, title, outLang)
+    let inApiUrl = 'https://' + inLang.value + '.wikipedia.org';
+    return this.getDifferentLangTitle(inApiUrl, title, outLang.value)
                .then(translation => {
                  this.setState({ outputTitle: translation });
-                 return this.getExtraPageInfo(outApiUrl, translation);
+                 return this.getExtraPageInfo(outLang, translation);
                });
   };
 }

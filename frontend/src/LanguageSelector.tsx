@@ -1,5 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
+import {Language, languages} from './Language';
+
 
 interface Props {
   language: Language;
@@ -10,32 +12,12 @@ interface State {
 
 }
 
-export interface Language {
-  label: string;
-  value: string;
-}
-
-const languageOptions = [
-  {
-    label: 'English',
-    value: 'en',
-  },
-  {
-    label: 'Dutch',
-    value: 'nl',
-  },
-  {
-    label: 'German',
-    value: 'de',
-  }
-];
-
 export class LanguageSelector extends React.Component<Props, State> {
   render() {
     return (
       <div className="language-selector">
         <Select
-          options={languageOptions}
+          options={languages}
           value={this.props.language}
           onChange={(v, e) => v && this.props.onChange(v)} />
       </div>

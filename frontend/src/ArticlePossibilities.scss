@@ -1,5 +1,78 @@
 .article-possibilities {
+    .react-list-select {
+	display: inline-block;
+	position: relative;
+	outline: none;
+    }
+
+    .react-list-select--item {
+	cursor: pointer;
+	position: relative;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+    }
+
+    .react-list-select--item.is-selected {
+	-webkit-user-select: inherit;
+	-moz-user-select: inherit;
+	-ms-user-select: inherit;
+	-o-user-select: inherit;
+	user-select: inherit;
+    }
+
+    .react-list-select--item.is-focused {
+	-webkit-user-select: inherit;
+	-moz-user-select: inherit;
+	-ms-user-select: inherit;
+	-o-user-select: inherit;
+	user-select: inherit;
+    }
+
+    .is-focused {
+        .list-group-item {
+            background-color: rgba(38, 132, 255, 0.08);
+        }
+    }
+
+    .is-selected {
+        .list-group-item {
+            background-color: #0d6efd;
+            color: white;
+
+            .badge {
+                background-color: white !important;
+                color: black;
+            }
+        }
+    }
+
+
+    .react-list-select--item.is-disabled {
+	cursor: default;
+    }
+
+    ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+    }
+
     li {
-        color: black;
+        padding: 0px;
+        margin: 0px;
+    }
+    .float-right {
+        float: right;
+    }
+
+    .snippet {
+        display: inline-block;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }

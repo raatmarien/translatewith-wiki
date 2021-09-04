@@ -5,8 +5,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import {WikiApi, Page} from './WikiApi';
+import Language from './Language';
 
-import {LanguageSelector, Language} from './LanguageSelector';
+import LanguageSelector from './LanguageSelector';
 import TermInput from './TermInput';
 import TranslateOutput from './TranslateOutput';
 import TranslateButton from './TranslateButton';
@@ -61,7 +62,7 @@ class TranslateComponent extends React.Component<Props, State> {
   }
 
   setArticleSelected(value : number) {
-    this.setState({articleSelected: value});
+    this.setState({articleSelected: value}, () => this.translate())
   }
 
   findOptions() {
@@ -77,9 +78,31 @@ class TranslateComponent extends React.Component<Props, State> {
     });
     
     this.state.api.findTermOptions(
-      this.state.inputLanguage.value,
+      this.state.inputLanguage,
       this.state.inputTerm)
-    .catch(error => console.log(error));
+        .then(() => this.translate())
+        .catch(error => console.log(error));
+  }
+
+  translate() {
+    if (this.state.articlePossibilities &&
+        this.state.articlePossibilities.length > this.state.articleSelected) {
+      this.setState({
+        translateStarted: true,
+
+        outputTitle: undefined,
+        outputUrl: undefined,
+        outputSnippet: undefined,
+        outputImageUrl: undefined,
+        outputRedirects: undefined,
+      });
+
+      this.state.api.wikiTranslate(
+        this.state.inputLanguage,
+        this.state.articlePossibilities[this.state.articleSelected].title,
+        this.state.outputLanguage)
+          .catch(error => console.log(error));
+    }
   }
 
   render() {
