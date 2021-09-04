@@ -83,9 +83,19 @@ export class WikiApi {
   }
 
   private searchPagesAutoLanguage(search : string) : Promise<Page[]> {
+    let findDescription = function(descriptions : any,
+                                   languages : Language[]) : string {
+      for (let i = 0; i < languages.length; i++) {
+        if (descriptions[languages[i].value]) {
+          return descriptions[languages[i].value].value;
+        }
+      }
+      return '';
+    }
+
     let apiUrl = 'https://www.wikidata.org/w/api.php';
     let normalizedTitle = this.normalizeTitle(search)
-    let options = this.baseOptions + '&action=wbgetentities&props=sitelinks'
+    let options = this.baseOptions + '&action=wbgetentities&props=sitelinks|descriptions'
                 + '&sites=' + this.getLanguageSites()
                 + '&titles=' + normalizedTitle;
     return fetch(apiUrl + options)
@@ -109,7 +119,9 @@ export class WikiApi {
             if (articleLanguages.length > 0) {
               pages.push({
                 title: normalizedTitle,
-                snippet: '',
+                snippet: findDescription(
+                  data.entities[keys[i]].descriptions,
+                  articleLanguages),
                 url: '',
                 languages: articleLanguages,
               });
