@@ -63,11 +63,23 @@ class TranslateComponent extends React.Component<Props, State> {
   }
 
   setInputLanguage(language : Language) {
-    this.setState({inputLanguage: language});
+    this.setState({inputLanguage: language}, () => {
+      if (this.state.translateStarted) {
+        this.findOptions();
+      }
+    });
   }
 
   setOutputLanguage(language : Language) {
-    this.setState({outputLanguage: language});
+    this.setState({outputLanguage: language}, () => {
+      if (this.state.translateStarted) {
+        if (this.state.articlePossibilities) {
+          this.translate();
+        } else {
+          this.findOptions();
+        }
+      }
+    });
   }
 
   setInputTerm(value : string) {
@@ -82,6 +94,7 @@ class TranslateComponent extends React.Component<Props, State> {
     this.setState({
       translateStarted: true,
       articleSelected: 0,
+      articlePossibilities: undefined,
 
       outputLanguageAlternatives: undefined,
       outputTitle: undefined,

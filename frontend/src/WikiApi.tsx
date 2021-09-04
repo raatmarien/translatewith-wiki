@@ -125,7 +125,7 @@ export class WikiApi {
   : Promise<LanguageTitle[]> {
     // https://www.mediawiki.org/wiki/API:Langlinks
     let options = this.baseOptions
-                + '&action=query&prop=langlinks';
+                + '&action=query&prop=langlinks&lllimit=500';
     let apiUrl = wikiUrl + '/w/api.php';
     return fetch(apiUrl + options + '&titles=' + title)
       .then(res => res.json())
