@@ -60,13 +60,14 @@ function TranslateOutput(props: Props) {
       </div>
     );
   } else if (props.translateStarted) {
-    return (<Loader
-              className="text-center"
-              type="TailSpin"
-              color="#00BFFF"
-              height={60}
-              width={60}
-            />);
+    return (
+      <div className="text-center">
+        <Loader
+          type="TailSpin"
+          color="#00BFFF"
+          height={60}
+          width={60}
+        /></div>);
   } else {
     return (<div className="translate-output">
         <Card.Title>Input some text and press translate</Card.Title>

@@ -1,24 +1,35 @@
+import './ArticlePossibilities.scss';
+
 import React from 'react';
 import Card from 'react-bootstrap/Card';
+import {Page} from './WikiApi';
+import List from 'react-list-select'
+
 
 interface Props {
-  articles?: Article[];
+  articles?: Page[];
+  selected: number;
+  onChange: (val : number) => void;
 };
 
 interface State {
 };
 
-export interface Article {
-  title: string;
-  language: Language;
-  imageUrl?: url;
-};
-
-
 export class ArticlePossibilities extends React.Component<Props, State> {
   constructor(props : Props) {
     super(props);
     this.state = {};
+  }
+
+  getListItems() {
+    if (this.props.articles && this.props.articles.length > 0) {
+      let listItems = [];
+      for (let i = 0; i < this.props.articles.length; i++) {
+        listItems.push(this.props.articles[i].title);
+      }
+      return listItems;
+    }
+    return [];
   }
 
   render() {
@@ -31,7 +42,12 @@ export class ArticlePossibilities extends React.Component<Props, State> {
               <Card.Title>Did you mean?</Card.Title>
             </Card.Header>
             <Card.Body>
-              <Card.Text>Something</Card.Text>
+              <List
+                items={this.getListItems()}
+                selected={this.props.selected}
+                multiple={false}
+                onChange={this.props.onChange}
+                />
             </Card.Body>
           </Card>
         </div>);
