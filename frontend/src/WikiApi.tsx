@@ -42,28 +42,18 @@ export class WikiApi {
       });
    };
 
-  private notStandardImage(image : any) : boolean {
-    return image.title !== 'File:Commons-logo.svg';
-  }
-
-  private getImage(apiUrl : string, title : string) : Promise<string> {
-    let options = this.baseOptions + '&action=query&prop=images&titles=' + title;
+  private getImage(apiUrl : string, title : string, small?: boolean) : Promise<string> {
+    // https://www.mediawiki.org/wiki/Extension:PageImages
+    let options = this.baseOptions 
+                + '&action=query&prop=pageimages&piprop=thumbnail'
+                + '&pithumbsize=' + (small ? 100 : 500)
+                + '&titles=' + title;
     return fetch(apiUrl + options)
       .then(res => res.json())
       .then(data => {
         let page = this.unwrapPages(data);
-        let images = page.images.filter(this.notStandardImage);
-        if (images.length > 0) {
-          let options =
-            this.baseOptions
-            + '&action=query&prop=imageinfo&iiprop=url&titles='
-            + images[0].title;
-          return fetch(apiUrl + options)
-            .then(res => res.json())
-            .then(data => {
-              let page = this.unwrapPages(data);
-              return page.imageinfo[0].url;
-            });
+        if (page && page.thumbnail) {
+          return page.thumbnail.source;
         }
         return ''
       });
