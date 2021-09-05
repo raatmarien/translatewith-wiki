@@ -124,7 +124,6 @@ class TranslateComponent extends React.Component<Props, State> {
       this.state.inputTerm)
         .then(() => {
           this.translate();
-          console.log(this.state.articlePossibilities);
           if (this.state.articlePossibilities) {
             this.state.api.findThumbnailsForPages(
               this.state.articlePossibilities,
