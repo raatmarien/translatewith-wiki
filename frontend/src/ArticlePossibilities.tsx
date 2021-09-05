@@ -35,16 +35,27 @@ export class ArticlePossibilities extends React.Component<Props, State> {
       for (let i = 0; i < this.props.articles.length; i++) {
         listItems.push((
           <ListGroup.Item>
-            <div>
-              {this.props.articles[i].title}
-              {this.props.articles[i].languages.map(l => (
-                 <Badge key={l.value} className="float-right" bg="secondary">
-                   {l.value}
-                 </Badge>))}
+            <div className="vert">
+              <div className="imgdiv">
+                {this.props.articles[i].imageUrl && (
+                   <div className="imgsizer">
+                     <img src={this.props.articles[i].imageUrl} alt="thumb" />
+                   </div>
+                 )}
+              </div>
+
+              <div className="textdiv">
+                {this.props.articles[i].title}
+                {this.props.articles[i].languages.map(l => (
+                   <Badge key={l.value} className="float-right" bg="secondary">
+                     {l.value}
+                   </Badge>))}
+                 <div className="snippet small"
+                   dangerouslySetInnerHTML
+                   ={getSnippetHtml(this.props.articles[i].snippet)} />
+              </div>
             </div>
 
-            <div className="snippet small"
-              dangerouslySetInnerHTML={getSnippetHtml(this.props.articles[i].snippet)} />
           </ListGroup.Item>
         ));
       }

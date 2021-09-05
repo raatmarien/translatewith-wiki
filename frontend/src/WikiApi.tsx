@@ -46,7 +46,7 @@ export class WikiApi {
     // https://www.mediawiki.org/wiki/Extension:PageImages
     let options = this.baseOptions 
                 + '&action=query&prop=pageimages&piprop=thumbnail'
-                + '&pithumbsize=' + (small ? 100 : 500)
+                + '&pithumbsize=' + (small ? 58 : 500)
                 + '&titles=' + title;
     return fetch(apiUrl + options)
       .then(res => res.json())
@@ -55,7 +55,7 @@ export class WikiApi {
         if (page && page.thumbnail) {
           return page.thumbnail.source;
         }
-        return ''
+        return '';
       });
    };
 
@@ -235,6 +235,26 @@ export class WikiApi {
                  }
                });
   };
+
+  private findThumbnailForPage(
+    page: Page,
+    callback: (p : Page) => void) {
+    let wikiUrl = 'https://' + page.languages[0].value + '.wikipedia.org';
+    let apiUrl = wikiUrl + '/w/api.php';
+    return this.getImage(apiUrl, page.title, true)
+      .then(imageUrl => {
+        page.imageUrl = imageUrl;
+        callback(page);
+        return;
+      })
+      .catch(error => console.log(error));
+  }
+
+  public findThumbnailsForPages(
+    pages: Page[],
+    callback: (p : Page) => void) {
+    pages.map(p => this.findThumbnailForPage(p, callback));
+  }
 }
 
 export default WikiApi;

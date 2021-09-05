@@ -92,4 +92,22 @@
     .searchmatch {
         font-weight: bold;
     }
+
+    .vert {
+        display: flex;
+        flex-direction: row;
+        align-items: left;
+        max-width: 100%;
+    }
+
+    .textdiv {
+        flex-grow: 1;
+        min-width: 0;
+    }
+
+    .imgsizer {
+        max-height: 100%;
+        min-width: 58px;
+        margin-right: 0.5rem;
+    }
 }

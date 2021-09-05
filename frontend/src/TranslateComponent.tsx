@@ -107,8 +107,28 @@ class TranslateComponent extends React.Component<Props, State> {
     this.state.api.findTermOptions(
       this.state.inputLanguage,
       this.state.inputTerm)
-        .then(() => this.translate())
+        .then(() => {
+          this.translate();
+          console.log(this.state.articlePossibilities);
+          if (this.state.articlePossibilities) {
+            this.state.api.findThumbnailsForPages(
+              this.state.articlePossibilities,
+              this.addImageToArticlePossibility.bind(this));
+          }
+          return;
+        })
         .catch(error => console.log(error));
+  }
+
+  addImageToArticlePossibility(page: Page) {
+    if (this.state.articlePossibilities) {
+      let updatePage = this.state.articlePossibilities
+                           .find(p => p.title === page.title
+                                 && p.languages[0].value === page.languages[0].value);
+      if (updatePage) {
+        updatePage.imageUrl = page.imageUrl;
+      }
+    }
   }
 
   translate() {
