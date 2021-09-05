@@ -1,5 +1,204 @@
 import Language from './Language';
 
+export const top50Languages : Language[] = [
+  {
+    "label": "English",
+    "value": "en"
+  },
+  {
+    "label": "Cebuano",
+    "value": "ceb"
+  },
+  {
+    "label": "Swedish",
+    "value": "sv"
+  },
+  {
+    "label": "German",
+    "value": "de"
+  },
+  {
+    "label": "French",
+    "value": "fr"
+  },
+  {
+    "label": "Dutch",
+    "value": "nl"
+  },
+  {
+    "label": "Russian",
+    "value": "ru"
+  },
+  {
+    "label": "Italian",
+    "value": "it"
+  },
+  {
+    "label": "Spanish",
+    "value": "es"
+  },
+  {
+    "label": "Polish",
+    "value": "pl"
+  },
+  {
+    "label": "Egyptian Arabic",
+    "value": "arz"
+  },
+  {
+    "label": "Japanese",
+    "value": "ja"
+  },
+  {
+    "label": "Vietnamese",
+    "value": "vi"
+  },
+  {
+    "label": "Waray-Waray",
+    "value": "war"
+  },
+  {
+    "label": "Chinese",
+    "value": "zh"
+  },
+  {
+    "label": "Arabic",
+    "value": "ar"
+  },
+  {
+    "label": "Ukrainian",
+    "value": "uk"
+  },
+  {
+    "label": "Portuguese",
+    "value": "pt"
+  },
+  {
+    "label": "Persian",
+    "value": "fa"
+  },
+  {
+    "label": "Catalan",
+    "value": "ca"
+  },
+  {
+    "label": "Serbian",
+    "value": "sr"
+  },
+  {
+    "label": "Indonesian",
+    "value": "id"
+  },
+  {
+    "label": "Norwegian (Bokmål)",
+    "value": "no"
+  },
+  {
+    "label": "Korean",
+    "value": "ko"
+  },
+  {
+    "label": "Finnish",
+    "value": "fi"
+  },
+  {
+    "label": "Hungarian",
+    "value": "hu"
+  },
+  {
+    "label": "Czech",
+    "value": "cs"
+  },
+  {
+    "label": "Serbo-Croatian",
+    "value": "sh"
+  },
+  {
+    "label": "Min Nan",
+    "value": "zh-min-nan"
+  },
+  {
+    "label": "Turkish",
+    "value": "tr"
+  },
+  {
+    "label": "Romanian",
+    "value": "ro"
+  },
+  {
+    "label": "Chechen",
+    "value": "ce"
+  },
+  {
+    "label": "Basque",
+    "value": "eu"
+  },
+  {
+    "label": "Malay",
+    "value": "ms"
+  },
+  {
+    "label": "Tatar",
+    "value": "tt"
+  },
+  {
+    "label": "Esperanto",
+    "value": "eo"
+  },
+  {
+    "label": "Hebrew",
+    "value": "he"
+  },
+  {
+    "label": "Armenian",
+    "value": "hy"
+  },
+  {
+    "label": "Bulgarian",
+    "value": "bg"
+  },
+  {
+    "label": "Danish",
+    "value": "da"
+  },
+  {
+    "label": "South Azerbaijani",
+    "value": "azb"
+  },
+  {
+    "label": "Slovak",
+    "value": "sk"
+  },
+  {
+    "label": "Kazakh",
+    "value": "kk"
+  },
+  {
+    "label": "Minangkabau",
+    "value": "min"
+  },
+  {
+    "label": "Estonian",
+    "value": "et"
+  },
+  {
+    "label": "Croatian",
+    "value": "hr"
+  },
+  {
+    "label": "Belarusian",
+    "value": "be"
+  },
+  {
+    "label": "Lithuanian",
+    "value": "lt"
+  },
+  {
+    "label": "Greek",
+    "value": "el"
+  }
+];
+
 export const languages : Language[] = [
   {
     "label": "English",

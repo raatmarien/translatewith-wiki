@@ -1,5 +1,5 @@
 import Language from './Language';
-import {languages} from './LanguageList';
+import {languages, top50Languages} from './LanguageList';
 
 export interface Page {
   title: string;
@@ -74,7 +74,7 @@ export class WikiApi {
   }
 
   private getLanguageSites() : string {
-    let sites = languages.map(l => l.value + 'wiki');
+    let sites = top50Languages.map(l => l.value + 'wiki');
     let str = '';
     for (let i = 0; i < sites.length - 1; i++) {
       str += sites[i] + '|';
