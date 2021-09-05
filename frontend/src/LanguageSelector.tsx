@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
-import {Language, languages} from './Language';
+import Language from './Language';
+import {languages} from './LanguageList';
 
 
 interface Props {
@@ -20,17 +21,17 @@ const autoLanguage : Language = {
 
 export class LanguageSelector extends React.Component<Props, State> {
   render() {
-    let options = this.props.addAuto
-                ? [autoLanguage].concat(languages)
-                : languages;
-    return (
-      <div className="language-selector">
-        <Select
-          options={options}
-          value={this.props.language}
-          onChange={(v, e) => v && this.props.onChange(v)} />
-      </div>
-    );
+  let options = this.props.addAuto
+  ? [autoLanguage].concat(languages)
+  : languages;
+  return (
+  <div className="language-selector">
+    <Select
+      options={options}
+      value={this.props.language}
+      onChange={(v, e) => v && this.props.onChange(v)} />
+  </div>
+  );
   }
 }
 

@@ -1,4 +1,5 @@
-import {Language, languages} from './Language';
+import Language from './Language';
+import {languages} from './LanguageList';
 
 export interface Page {
   title: string;
