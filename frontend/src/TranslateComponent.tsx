@@ -54,6 +54,19 @@ class TranslateComponent extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    const savedInputLanguage = localStorage.getItem('inputLanguage');
+    if (savedInputLanguage) {
+      this.setState({
+        inputLanguage: JSON.parse(savedInputLanguage)
+      });
+    } 
+    const savedOutputLanguage = localStorage.getItem('outputLanguage');
+    if (savedOutputLanguage) {
+      this.setState({
+        outputLanguage: JSON.parse(savedOutputLanguage)
+      });
+    }
+
     window.addEventListener("resize", this.resize.bind(this));
     this.resize();
   }
@@ -63,6 +76,7 @@ class TranslateComponent extends React.Component<Props, State> {
   }
 
   setInputLanguage(language : Language) {
+    localStorage.setItem('inputLanguage', JSON.stringify(language));
     this.setState({inputLanguage: language}, () => {
       if (this.state.translateStarted) {
         this.findOptions();
@@ -71,6 +85,7 @@ class TranslateComponent extends React.Component<Props, State> {
   }
 
   setOutputLanguage(language : Language) {
+    localStorage.setItem('outputLanguage', JSON.stringify(language));
     this.setState({outputLanguage: language}, () => {
       if (this.state.translateStarted) {
         if (this.state.articlePossibilities) {
