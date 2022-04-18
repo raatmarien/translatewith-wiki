@@ -1,3 +1,5 @@
+@import 'colors';
+
 .article-possibilities {
     .react-list-select {
 	display: inline-block;
@@ -33,13 +35,13 @@
 
     .is-focused {
         .list-group-item {
-            background-color: rgba(38, 132, 255, 0.08);
+            background-color: $light-accent;
         }
     }
 
     .is-selected {
         .list-group-item {
-            background-color: #0d6efd;
+            background-color: $primary;
             color: white;
 
             .badge {

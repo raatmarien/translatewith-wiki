@@ -1,5 +1,4 @@
-$primary: #8f3b9b;
-$secondary: #fdefff;
+@import 'colors';
 
 $theme-colors: (
     "primary": $primary,
@@ -9,10 +8,4 @@ $theme-colors: (
 
 @import "~bootstrap/scss/bootstrap";
 
-.card-header {
-    background-color: $secondary;
-}
 
-.body {
-    background-color: #fffbff;
-}

@@ -1,2 +1,13 @@
 @import "colored-bootstrap";
 
+.card-header {
+    background-color: $light-accent;
+}
+
+.body {
+    background-color: $page-bg;
+}
+
+.navbar {
+    background-color: $navbar-bg;
+}

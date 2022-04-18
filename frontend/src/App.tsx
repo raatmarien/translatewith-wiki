@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 function App() {
   return (
     <div className="App">
-      <Navbar bg="secondary" expand="lg" className="mb-3">
+      <Navbar variant="dark" expand="lg" className="mb-3">
         <Container>
           <Navbar.Brand>TranslateWith.Wiki</Navbar.Brand>
         </Container>
