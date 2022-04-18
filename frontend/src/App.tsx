@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <Navbar bg="light" expand="lg" className="mb-3">
         <Container>
-          <Navbar.Brand>WhatIsItCalled.In</Navbar.Brand>
+          <Navbar.Brand>TranslateWith.Wiki</Navbar.Brand>
         </Container>
       </Navbar>
       <Container>

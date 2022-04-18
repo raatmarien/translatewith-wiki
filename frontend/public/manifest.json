@@ -1,6 +1,6 @@
 {
-  "short_name": "WhatIsItCalled.In",
-  "name": "WhatIsItCalled.In - Translate using Wikipedia articles",
+  "short_name": "TranslateWith.Wiki",
+  "name": "TranslateWith.Wiki - Translate terms using Wikipedia articles",
   "icons": [
     {
       "src": "static/favicon.ico",
