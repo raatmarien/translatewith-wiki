@@ -8,9 +8,16 @@ import Container from 'react-bootstrap/Container';
 function App() {
   return (
     <div className="App">
-      <Navbar variant="dark" expand="lg" className="mb-3">
+      <Navbar variant="light" expand="lg" className="mb-3">
         <Container>
-          <Navbar.Brand>TranslateWith.Wiki</Navbar.Brand>
+          <Navbar.Brand>
+            <img
+              alt="The logo of TranslateWith.Wiki - two puzzle pieces with different characters"
+              src="/img/logo.svg"
+              width="80"
+              className="d-inline-block align-top"
+              />{' '}
+            TranslateWith.Wiki</Navbar.Brand>
         </Container>
       </Navbar>
       <Container>
