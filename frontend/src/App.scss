@@ -21,20 +21,34 @@
 .card-header {
     background-color: $light-accent;
 }
-
+    
 body {
     background-color: $page-bg;
+    height: 100vh;
+    margin: 0;
 
-    footer {
-        background-color: #46174d;
-        color: #bbb;
-        margin-top: 1em;
-        padding: 0.8em;
-        text-align: center;
-        width: 100%;
+    .App {
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
 
-        a {
-            color: #fff;
+        .footer-container {
+            width: 100%;
+            margin-top: auto;
+
+            footer {
+                background-color: #46174d;
+                color: #bbb;
+                margin-top: 1em;
+                padding: 0.8em;
+                text-align: center;
+                width: 100%;
+
+                a {
+                    color: #fff;
+                }
+            }
         }
     }
 }

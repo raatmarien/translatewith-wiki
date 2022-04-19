@@ -41,10 +41,12 @@ function App() {
         <TranslateComponent />
         <ExplanationComponent />
       </Container>
-      <footer>
-        <a href="https://translatewith.wiki">TranslateWith.Wiki</a> is free and open source software!
-        Report bugs or contribute at <a href="https://github.com/raatmarien/translatewith-wiki">the Github page</a>
-      </footer>
+      <div className="footer-container">
+        <footer>
+          <a href="https://translatewith.wiki">TranslateWith.Wiki</a> is free and open source software!
+          Report bugs or contribute at <a href="https://github.com/raatmarien/translatewith-wiki">the Github page</a>
+        </footer>
+      </div>
     </div>
   );
 }
