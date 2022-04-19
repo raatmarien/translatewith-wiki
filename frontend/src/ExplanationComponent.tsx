@@ -71,6 +71,33 @@ class ExplanationComponent extends React.Component<Props, State> {
                 settings icon and select "Add to Home screen" or "Add
                 page shortcut".
               </Card.Text>
+
+              <Card.Title>
+                How does this work?
+              </Card.Title>
+
+              <Card.Text>
+                Great question! I use 
+                the <a href="https://www.mediawiki.org/wiki/API:Main_page">MediaWiki API</a> to
+                find the articles related to the term you want to translate. Then I use
+                the language links of those articles to grab the right translation. If you
+                are curious, read more about the project on <a
+                href="https://marienraat.nl/blog/posts/translatewith-wiki/">my
+                blog</a>. You can also see the complete source code on <a
+                href="https://github.com/raatmarien/translatewith-wiki">Github</a>. There
+                you can suggest new features or contribute your own code.
+              </Card.Text>
+
+              <Card.Title>
+                Who made this?
+              </Card.Title>
+
+              <Card.Text>
+                <a href="https://translatewith.wiki">TranslateWith.Wiki</a> was made by
+                me, Marien! Check out more of my projects on <a
+                                                               href="https://marienraat.nl">my
+                  website</a> or <a href="https://github.com/raatmarien">my Github</a>.
+              </Card.Text>
             </Card.Body>
           </Card>
         </div>
