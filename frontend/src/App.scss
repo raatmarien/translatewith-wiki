@@ -24,8 +24,22 @@
 
 body {
     background-color: $page-bg;
+
+    footer {
+        background-color: #46174d;
+        color: #bbb;
+        margin-top: 1em;
+        padding: 0.8em;
+        text-align: center;
+        width: 100%;
+
+        a {
+            color: #fff;
+        }
+    }
 }
 
 .navbar {
     background-color: $navbar-bg;
 }
+
