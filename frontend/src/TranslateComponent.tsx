@@ -29,6 +29,8 @@ import TermInput from './TermInput';
 import TranslateOutput from './TranslateOutput';
 import TranslateButton from './TranslateButton';
 import { ArticlePossibilities } from './ArticlePossibilities';
+import { Button, Container } from 'react-bootstrap';
+import { ArrowLeftRight } from 'react-bootstrap-icons';
 
 interface Props {
 }
@@ -112,6 +114,13 @@ class TranslateComponent extends React.Component<Props, State> {
         }
       }
     });
+  }
+
+  swapLanguages() {
+    let oldInputLanguage = this.state.inputLanguage;
+    let oldOutputLanguage = this.state.outputLanguage;
+    this.setInputLanguage(oldOutputLanguage);
+    this.setOutputLanguage(oldInputLanguage);
   }
 
   setInputTerm(value : string) {
@@ -200,13 +209,25 @@ class TranslateComponent extends React.Component<Props, State> {
             {this.state.oneColumn && possibilities}
             <Card style={cardStyle} className="mb-3">
               <Card.Header>
-                <Card.Title>Translate a concept or term from</Card.Title>
-
-                <LanguageSelector
-                  language={this.state.inputLanguage}
-                  onChange={this.setInputLanguage.bind(this)}
-                  addAuto={true}
-                />
+                <Container>
+                  <Row>
+                    <Col>
+                      <Card.Title>Translate a concept or term from</Card.Title>
+                    </Col>
+                    <Col md="auto">
+                      <Button variant="secondary" onClick={this.swapLanguages.bind(this)} title="Swap languages">
+                        <ArrowLeftRight />
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <LanguageSelector
+                      language={this.state.inputLanguage}
+                      onChange={this.setInputLanguage.bind(this)}
+                      addAuto={true}
+                    />
+                  </Row>
+                </Container>
               </Card.Header>
               <Card.Body>
                 <TermInput
