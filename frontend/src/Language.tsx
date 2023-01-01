@@ -18,6 +18,7 @@
 export interface Language {
   label: string;
   value: string;
+  pageCode?: string;
 }
 
 export default Language;

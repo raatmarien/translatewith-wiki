@@ -141,7 +141,7 @@ export class WikiApi {
   }
 
   private searchPages(language: Language, search : string) : Promise<Page[]> {
-    let wikiUrl = 'https://' + language.value + '.wikipedia.org';
+    let wikiUrl = this.getWikiUrl(language);
     let apiUrl = wikiUrl + '/w/api.php';
     let options = this.baseOptions + '&action=query&list=search';
     return fetch(apiUrl + options + '&srsearch=' + search)
@@ -167,7 +167,7 @@ export class WikiApi {
   }
 
   private getExtraPageInfo(language : Language, title : string) {
-    let wikiUrl = 'https://' + language.value + '.wikipedia.org';
+    let wikiUrl = this.getWikiUrl(language);
     let apiUrl = wikiUrl + '/w/api.php';
     this.searchPage(language, title)
       .then(page => {
@@ -237,7 +237,7 @@ export class WikiApi {
       return this.getExtraPageInfo(outLang, title);
     }
 
-    let inApiUrl = 'https://' + inLang.value + '.wikipedia.org';
+    let inApiUrl = this.getWikiUrl(inLang);
     return this.getDifferentLangTitles(inApiUrl, title)
                .then(langTitles => {
                  let correct = langTitles.find(lt => lt.language.value === outLang.value);
@@ -256,7 +256,7 @@ export class WikiApi {
   private findThumbnailForPage(
     page: Page,
     callback: (p : Page) => void) {
-    let wikiUrl = 'https://' + page.languages[0].value + '.wikipedia.org';
+    let wikiUrl = this.getWikiUrl(page.languages[0]);
     let apiUrl = wikiUrl + '/w/api.php';
     return this.getImage(apiUrl, page.title, true)
       .then(imageUrl => {
@@ -271,6 +271,12 @@ export class WikiApi {
     pages: Page[],
     callback: (p : Page) => void) {
     pages.map(p => this.findThumbnailForPage(p, callback));
+  }
+
+  private getWikiUrl(language: Language) {
+    const wikiUrl = 'https://' + (language.pageCode ?? language.value) + '.wikipedia.org';
+    
+    return wikiUrl;
   }
 }
 
