@@ -108,7 +108,8 @@ export const top50Languages : Language[] = [
   },
   {
     "label": "Norwegian (Bokmål)",
-    "value": "no"
+    "value": "nb",
+    "pageCode": "no"
   },
   {
     "label": "Korean",
@@ -307,7 +308,8 @@ export const languages : Language[] = [
   },
   {
     "label": "Norwegian (Bokmål)",
-    "value": "no"
+    "value": "nb",
+    "pageCode": "no"
   },
   {
     "label": "Korean",
